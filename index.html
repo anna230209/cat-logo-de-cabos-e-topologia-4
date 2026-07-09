@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Visual de Redes para Automação</title>
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --surface-alt: #f8f9fa;
+            --text: #1a1d23;
+            --text-secondary: #5a5f6b;
+            --accent: #e67e22;
+            --accent-hover: #d35400;
+            --blue-dark: #1e3a5f;
+            --blue-mid: #2c5f8a;
+            --blue-light: #e8f0f8;
+            --green: #27ae60;
+            --red: #c0392b;
+            --border: #dde1e7;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+            --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.16), 0 6px 16px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(160deg, #e8ecf1 0%, #f0f2f5 30%, #eef1f5 60%, #e9edf3 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px; /* Reduzido para aproveitar mais a largura */
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Padrão de fundo sutil (grid industrial) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(30, 58, 95, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 58, 95, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: -20px -20px;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 100%; /* Remove o limite anterior, agora ocupa toda a largura disponível */
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            background: var(--surface);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            padding: 28px 40px 20px 40px; /* Mais espaço horizontal */
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-dark) 0%, var(--blue-mid) 40%, var(--accent) 100%);
+        }
+
+        .header .icon-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            margin-top: 10px;
+            background: var(--blue-light);
+            color: var(--blue-dark);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.4px;
+        }
+
+        /* ========== TABS ========== */
+        .tabs-container {
+            display: flex;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            padding: 6px 12px;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 13px 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: var(--radius);
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.2px;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: var(--surface-alt);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--blue-dark);
+            color: #ffffff;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .tab-btn .tab-icon {
+            font-size: 1.2rem;
+            transition: transform var(--transition);
+        }
+
+        .tab-btn.active .tab-icon {
+            transform: scale(1.15);
+        }
+
+        /* ========== CONTENT PANEL ========== */
+        .content-panel {
+            background: var(--surface);
+            border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+            padding: 32px 40px 40px 40px; /* Mais espaço interno */
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            border-top: none;
+            min-height: 420px;
+            transition: all var(--transition);
+        }
+
+        /* ========== TAB CONTENT SECTIONS ========== */
+        .tab-content {
+            display: none;
+            animation: fadeSlideIn 0.35s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== CARDS (Aba 1 - Cabos) ========== */
+        .cards-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            justify-content: center;
+        }
+
+        .cable-card {
+            flex: 1 1 200px; /* Base maior para telas largas */
+            min-width: 180px;
+            max-width: 100%;
+            background: var(--surface-alt);
+            border: 2px solid transparent;
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cable-card:hover {
+            border-color: #c5cdd8;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            background: #fdfdfe;
+        }
+
+        .cable-card:active {
+            transform: scale(0.97);
+            transition: var(--transition-fast);
+        }
+
+        .cable-card.selected {
+            border-color: var(--accent);
+            background: #fffaf5;
+            box-shadow: var(--shadow-lg), 0 0 0 6px rgba(230, 126, 34, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .cable-card.selected::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .cable-card .card-emoji {
+            font-size: 3rem; /* Ligeiramente maior */
+            display: block;
+            margin-bottom: 10px;
+            transition: transform var(--transition);
+        }
+
+        .cable-card.selected .card-emoji {
+            transform: scale(1.1);
+            animation: bounceEmoji 0.5s ease-out;
+        }
+
+        @keyframes bounceEmoji {
+            0%,
+            100% {
+                transform: scale(1.1);
+            }
+            30% {
+                transform: scale(1.3);
+            }
+            60% {
+                transform: scale(1.05);
+            }
+        }
+
+        .cable-card .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .cable-card .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ========== DETAIL AREA ========== */
+        .detail-area {
+            background: var(--surface-alt);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            min-height: 80px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .detail-area .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .detail-area .detail-emoji {
+            font-size: 2.2rem;
+        }
+
+        .detail-area h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+        }
+
+        .detail-area .detail-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .detail-area .usage-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .usage-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .usage-tag .tag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        /* ========== TOPOLOGY BUTTONS (Aba 2) ========== */
+        .topology-buttons-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            justify-content: center;
+        }
+
+        .topology-btn {
+            flex: 1 1 220px;
+            min-width: 200px;
+            max-width: 100%;
+            padding: 22px 24px;
+            border: 2px solid var(--border);
+            background: var(--surface-alt);
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            letter-spacing: 0.2px;
+        }
+
+        .topology-btn:hover {
+            border-color: #c5cdd8;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            background: #fdfdfe;
+        }
+
+        .topology-btn:active {
+            transform: scale(0.97);
+            transition: var(--transition-fast);
+        }
+
+        .topology-btn.selected {
+            border-color: var(--accent);
+            background: #fffaf5;
+            box-shadow: var(--shadow-lg), 0 0 0 6px rgba(230, 126, 34, 0.08);
+            color: var(--accent-hover);
+            transform: translateY(-3px);
+        }
+
+        .topology-btn .btn-icon {
+            font-size: 2.8rem;
+            transition: transform var(--transition);
+        }
+
+        .topology-btn.selected .btn-icon {
+            transform: scale(1.15);
+        }
+
+        /* ========== SVG DIAGRAM ========== */
+        .diagram-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #fafbfc;
+            border-radius: var(--radius);
+            border: 1px dashed var(--border);
+            overflow-x: auto;
+        }
+
+        .diagram-container svg {
+            width: 100%;
+            height: auto;
+            max-width: 600px; /* Limite para não esticar demais */
+        }
+
+        /* ========== TOPOLOGY DETAIL ========== */
+        .topology-detail {
+            background: var(--surface-alt);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition);
+        }
+
+        .topology-detail h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin-bottom: 10px;
+        }
+
+        .topology-detail .topo-explanation {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .pros-cons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .pros-cons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pros-box,
+        .cons-box {
+            padding: 18px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .pros-box {
+            border-left: 4px solid var(--green);
+        }
+
+        .cons-box {
+            border-left: 4px solid var(--red);
+        }
+
+        .pros-box h4,
+        .cons-box h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pros-box h4 {
+            color: var(--green);
+        }
+        .cons-box h4 {
+            color: var(--red);
+        }
+
+        .pros-box ul,
+        .cons-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pros-box li,
+        .cons-box li {
+            font-size: 0.85rem;
+            color: var(--text);
+            padding: 5px 0 5px 24px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .pros-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .cons-box li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* ========== PLACEHOLDER ========== */
+        .placeholder-message {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 30px;
+            font-size: 0.95rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 700px) {
+            .header {
+                padding: 20px 16px 16px 16px;
+                border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            }
+            .header h1 {
+                font-size: 1.35rem;
+            }
+            .header .icon-row {
+                font-size: 1.6rem;
+            }
+            .content-panel {
+                padding: 20px 16px 24px 16px;
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            }
+            .cards-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .cable-card {
+                flex-direction: row;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                text-align: left;
+                padding: 16px;
+            }
+            .cable-card .card-emoji {
+                font-size: 2.2rem;
+                margin-bottom: 0;
+            }
+            .topology-buttons-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .topology-btn {
+                flex-direction: row;
+                justify-content: center;
+                gap: 12px;
+                padding: 16px 20px;
+            }
+            .topology-btn .btn-icon {
+                font-size: 2rem;
+            }
+            .tab-btn {
+                font-size: 0.82rem;
+                padding: 11px 14px;
+                gap: 5px;
+            }
+            .tab-btn .tab-icon {
+                font-size: 1rem;
+            }
+            .diagram-container svg {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 5px;
+            }
+            .header h1 {
+                font-size: 1.15rem;
+            }
+            .tab-btn {
+                font-size: 0.72rem;
+                padding: 10px 8px;
+                gap: 3px;
+            }
+            .tab-btn .tab-icon {
+                font-size: 0.9rem;
+            }
+            .content-panel {
+                padding: 16px 10px 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div class="icon-row">🏭 ⚙️ 🌐</div>
+            <h1>Guia Visual de Redes para Automação</h1>
+            <p class="subtitle">Conectando o Chão de Fábrica com Inteligência</p>
+            <span class="badge">🔧 Rede Industrial Descomplicada</span>
+        </header>
+
+        <!-- ==================== TABS ==================== -->
+        <div class="tabs-container" role="tablist">
+            <button class="tab-btn active" data-tab="tab-cabos" role="tab" aria-selected="true">
+                <span class="tab-icon">🔌</span> Cabos Industriais
+            </button>
+            <button class="tab-btn" data-tab="tab-topologias" role="tab" aria-selected="false">
+                <span class="tab-icon">📐</span> Topologias
+            </button>
+        </div>
+
+        <!-- ==================== CONTENT PANEL ==================== -->
+        <div class="content-panel">
+
+            <!-- ========== ABA 1: CABOS INDUSTRIAIS ========== -->
+            <div class="tab-content active" id="tab-cabos">
+                <div class="cards-row">
+                    <!-- Card Par Trançado -->
+                    <div class="cable-card selected" data-cable="par-trancado" tabindex="0" role="button" aria-pressed="true">
+                        <span class="card-emoji">🔌</span>
+                        <span class="card-title">Par Trançado</span>
+                        <span class="card-subtitle">Cobre • RJ45 • Profibus</span>
+                    </div>
+                    <!-- Card Fibra Óptica -->
+                    <div class="cable-card" data-cable="fibra-optica" tabindex="0" role="button" aria-pressed="false">
+                        <span class="card-emoji">💡</span>
+                        <span class="card-title">Fibra Óptica</span>
+                        <span class="card-subtitle">Laser • Longa Distância</span>
+                    </div>
+                    <!-- Card Wireless -->
+                    <div class="cable-card" data-cable="wireless" tabindex="0" role="button" aria-pressed="false">
+                        <span class="card-emoji">📡</span>
+                        <span class="card-title">Wireless</span>
+                        <span class="card-subtitle">Rádio • Wi-Fi • 5G</span>
+                    </div>
+                </div>
+                <!-- Área de detalhes -->
+                <div class="detail-area" id="cable-detail">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+
+            <!-- ========== ABA 2: TOPOLOGIAS ========== -->
+            <div class="tab-content" id="tab-topologias">
+                <div class="topology-buttons-row">
+                    <button class="topology-btn selected" data-topology="estrela">
+                        <span class="btn-icon">⭐</span>
+                        Layout em Estrela
+                    </button>
+                    <button class="topology-btn" data-topology="barramento">
+                        <span class="btn-icon">➖</span>
+                        Layout em Barramento
+                    </button>
+                </div>
+                <!-- Área de detalhes da topologia -->
+                <div id="topology-detail-container">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ============ ELEMENTOS ============
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const cableCards = document.querySelectorAll('.cable-card');
+            const cableDetailArea = document.getElementById('cable-detail');
+            const topologyButtons = document.querySelectorAll('.topology-btn');
+            const topologyDetailContainer = document.getElementById('topology-detail-container');
+
+            // ============ DADOS DOS CABOS ============
+            const cableData = {
+                'par-trancado': {
+                    emoji: '🔌',
+                    title: 'Par Trançado (Cobre)',
+                    description: 'O Par Trançado é o cabo mais comum no chão de fábrica. Utiliza fios de cobre trançados em pares para reduzir interferências eletromagnéticas. É a espinha dorsal de redes como <strong>Ethernet Industrial</strong>, <strong>Profibus</strong>, <strong>DeviceNet</strong> e <strong>AS-Interface</strong>.',
+                    usageTags: [
+                        'Painéis de controle e CLPs',
+                        'Conexão de sensores e atuadores',
+                        'Redes Profibus e DeviceNet',
+                        'Ethernet Industrial (até 100m)',
+                        'Ambientes internos controlados'
+                    ]
+                },
+                'fibra-optica': {
+                    emoji: '💡',
+                    title: 'Fibra Óptica',
+                    description: 'A Fibra Óptica transmite dados por pulsos de luz através de filamentos de vidro ou plástico. É <strong>imune a interferências eletromagnéticas</strong>, ideal para áreas com motores de alta potência, inversores de frequência e equipamentos de solda. Perfeita para interligar diferentes prédios ou galpões da fábrica.',
+                    usageTags: [
+                        'Interligação entre galpões/prédios',
+                        'Áreas com alta interferência (motores, inversores)',
+                        'Longas distâncias (quilômetros)',
+                        'Conexão entre switches de diferentes setores',
+                        'Ambientes com risco de descargas elétricas'
+                    ]
+                },
+                'wireless': {
+                    emoji: '📡',
+                    title: 'Wireless (Sem Fio)',
+                    description: 'A comunicação Wireless utiliza ondas de rádio (Wi-Fi Industrial, 5G privado, ZigBee) para conectar dispositivos sem a necessidade de cabos físicos. É essencial para <strong>equipamentos móveis</strong> como pontes rolantes, veículos autoguiados (AGVs) e monitoramento remoto de máquinas rotativas.',
+                    usageTags: [
+                        'Pontes rolantes e equipamentos móveis',
+                        'Veículos autoguiados (AGVs)',
+                        'Monitoramento remoto de máquinas',
+                        'Áreas de difícil acesso para cabos',
+                        'Redes temporárias ou flexíveis'
+                    ]
+                }
+            };
+
+            // ============ DADOS DAS TOPOLOGIAS ============
+            const topologyData = {
+                'estrela': {
+                    title: 'Topologia em Estrela',
+                    explanation: 'Todos os dispositivos se conectam a um <strong>ponto central</strong> (switch ou hub industrial). É a topologia mais utilizada em redes Ethernet industriais modernas, onde cada máquina, CLP ou sensor possui seu próprio cabo dedicado até o switch.',
+                    svgDiagram: `
+                        <svg viewBox="0 0 280 190" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="140" y1="95" x2="45" y2="45" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="140" y1="95" x2="235" y2="45" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="140" y1="95" x2="35" y2="145" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="140" y1="95" x2="245" y2="145" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <line x1="140" y1="95" x2="140" y2="28" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+                            <circle cx="140" cy="95" r="18" fill="#1e3a5f" stroke="#e67e22" stroke-width="3"/>
+                            <text x="140" y="99" text-anchor="middle" fill="white" font-size="9" font-weight="700">SWITCH</text>
+                            <circle cx="45" cy="45" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <circle cx="235" cy="45" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <circle cx="35" cy="145" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <circle cx="245" cy="145" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <circle cx="140" cy="28" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <text x="45" y="68" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">CLP</text>
+                            <text x="235" y="68" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">Sensor</text>
+                            <text x="35" y="168" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">IHM</text>
+                            <text x="245" y="168" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">Drive</text>
+                            <text x="140" y="15" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">Atuador</text>
+                        </svg>`,
+                    pros: [
+                        'Fácil detecção e isolamento de falhas',
+                        'Um cabo rompido não afeta os demais dispositivos',
+                        'Fácil adicionar ou remover equipamentos',
+                        'Alta performance e baixa latência',
+                        'Cabeamento organizado e documentável'
+                    ],
+                    cons: [
+                        'Maior consumo de cabos (cada dispositivo tem seu próprio cabo)',
+                        'Dependência total do switch central',
+                        'Custo mais elevado de infraestrutura',
+                        'Switch é ponto único de falha (sem redundância)'
+                    ]
+                },
+                'barramento': {
+                    title: 'Topologia em Barramento',
+                    explanation: 'Todos os dispositivos compartilham um <strong>único cabo tronco</strong> (backbone). Cada equipamento se conecta a este barramento através de derivações. Muito comum em redes legadas como <strong>Profibus</strong>, <strong>CAN bus</strong> e <strong>DeviceNet</strong>.',
+                    svgDiagram: `
+                        <svg viewBox="0 0 280 190" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="25" y1="95" x2="255" y2="95" stroke="#e67e22" stroke-width="4" stroke-linecap="round"/>
+                            <text x="140" y="88" text-anchor="middle" fill="#e67e22" font-size="9" font-weight="700">BARRAMENTO TRONCO (Backbone)</text>
+                            <line x1="70" y1="95" x2="70" y2="52" stroke="#2c5f8a" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="70" cy="46" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <line x1="140" y1="95" x2="140" y2="42" stroke="#2c5f8a" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="140" cy="36" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <line x1="210" y1="95" x2="210" y2="52" stroke="#2c5f8a" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="210" cy="46" r="11" fill="#2c5f8a" stroke="#1e3a5f" stroke-width="2"/>
+                            <circle cx="25" cy="95" r="5" fill="#1e3a5f"/>
+                            <circle cx="255" cy="95" r="5" fill="#1e3a5f"/>
+                            <text x="25" y="120" text-anchor="middle" fill="#1e3a5f" font-size="7" font-weight="600">Term.</text>
+                            <text x="255" y="120" text-anchor="middle" fill="#1e3a5f" font-size="7" font-weight="600">Term.</text>
+                            <text x="70" y="30" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">CLP</text>
+                            <text x="140" y="20" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">Sensor</text>
+                            <text x="210" y="30" text-anchor="middle" fill="#1e3a5f" font-size="8" font-weight="600">Drive</text>
+                        </svg>`,
+                    pros: [
+                        'Menor consumo de cabos (custo reduzido)',
+                        'Instalação simples e rápida',
+                        'Ideal para layouts lineares (ex: esteiras)',
+                        'Funciona bem com poucos dispositivos'
+                    ],
+                    cons: [
+                        'Difícil detectar e isolar falhas',
+                        'Rompimento do cabo tronco derruba toda a rede',
+                        'Performance cai com muitos dispositivos',
+                        'Manutenção complexa (precisa parar a rede)',
+                        'Necessita terminadores nas pontas'
+                    ]
+                }
+            };
+
+            // ============ FUNÇÕES ============
+            function renderCableDetail(cableKey) {
+                const data = cableData[cableKey];
+                if (!data) return;
+                cableDetailArea.innerHTML = `
+                    <div class="detail-header">
+                        <span class="detail-emoji">${data.emoji}</span>
+                        <h3>${data.title}</h3>
+                    </div>
+                    <p class="detail-description">${data.description}</p>
+                    <div class="usage-tags">
+                        ${data.usageTags.map(tag => `<span class="usage-tag"><span class="tag-dot"></span>${tag}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            function renderTopologyDetail(topologyKey) {
+                const data = topologyData[topologyKey];
+                if (!data) return;
+                topologyDetailContainer.innerHTML = `
+                    <div class="diagram-container">
+                        ${data.svgDiagram}
+                    </div>
+                    <div class="topology-detail">
+                        <h3>${data.title}</h3>
+                        <p class="topo-explanation">${data.explanation}</p>
+                        <div class="pros-cons-grid">
+                            <div class="pros-box">
+                                <h4>✅ Vantagens</h4>
+                                <ul>
+                                    ${data.pros.map(p => `<li>${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="cons-box">
+                                <h4>❌ Desvantagens</h4>
+                                <ul>
+                                    ${data.cons.map(c => `<li>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ============ TROCA DE ABAS ============
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTabId = this.getAttribute('data-tab');
+
+                    // Atualiza botões
+                    tabButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+
+                    // Atualiza conteúdos
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    const targetContent = document.getElementById(targetTabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        // Re-dispara animação
+                        targetContent.style.animation = 'none';
+                        targetContent.offsetHeight;
+                        targetContent.style.animation = 'fadeSlideIn 0.35s ease-out';
+                    }
+                });
+            });
+
+            // ============ SELEÇÃO DE CARDS (Aba 1) ============
+            cableCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const cableKey = this.getAttribute('data-cable');
+                    // Atualiza seleção visual
+                    cableCards.forEach(c => {
+                        c.classList.remove('selected');
+                        c.setAttribute('aria-pressed', 'false');
+                    });
+                    this.classList.add('selected');
+                    this.setAttribute('aria-pressed', 'true');
+                    // Renderiza detalhes
+                    renderCableDetail(cableKey);
+                });
+
+                // Suporte a teclado (Enter/Space)
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // ============ SELEÇÃO DE TOPOLOGIAS (Aba 2) ============
+            topologyButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const topologyKey = this.getAttribute('data-topology');
+                    // Atualiza seleção visual
+                    topologyButtons.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    // Renderiza detalhes
+                    renderTopologyDetail(topologyKey);
+                });
+
+                btn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // ============ INICIALIZAÇÃO ============
+            // Renderiza o estado inicial (primeiro card e primeira topologia)
+            renderCableDetail('par-trancado');
+            renderTopologyDetail('estrela');
+
+            console.log('🏭 Guia Visual de Redes para Automação - Pronto!');
+            console.log('   Selecione as abas e cards para explorar.');
+        })();
+    </script>
+</body>
+</html>
